@@ -1,20 +1,16 @@
 import { genericSuccessResponse } from "../utils/index.js";
-import { callToAPIExample } from "../utils/callToAPIExample.js";
+import { getPatientAlertResponse } from "./apiCalls.js";
 
 export const perform = async (data, token, traceId) => {
   // -----------------------------------------------------------------------------------------
 
-  // TODO: ADD YOUR CODE HERE !
+  // TODO: ORI: ADD EXPLANATION HERE !
 
-  // This is an example of calling a BioT API (using the token from the service users token)
-  // In this case we are making a get patients request to organization API
-  // Remove this example call and add your code instead
+  console.log("3. Got data: " + data)
 
-  const callExampleResponse = await callToAPIExample(token, traceId);
+  const callExampleResponse = await getPatientAlertResponse(token, traceId);
 
-  // In this example you perform your logic with the response Here
-
-  console.info("got callExampleResponse ", callExampleResponse);
+  console.log("4. Got response: " + callExampleResponse)
 
   // -----------------------------------------------------------------------------------------
   return genericSuccessResponse(traceId);
