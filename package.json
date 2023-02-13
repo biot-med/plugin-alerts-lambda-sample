@@ -5,7 +5,8 @@
   "description": "Node.js AWS lambda seed for biot",
   "main": "index.js",
   "scripts": {
-    "local": "node localRunner.js",
+    "local": "",
+    "test": "node ./tests/test.js",
     "build": "",
     "clean": "",
     "zip": "node ./scripts/pack"
