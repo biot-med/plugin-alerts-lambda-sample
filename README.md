@@ -3,7 +3,7 @@
 
 # BioT's sample alert lambda sample
 
-**This is a sample lambda that dispatches alerts**
+### *This is a sample lambda for dispatching alerts*
 
 This lambda is forked from BioT's lambda seed and it's initial flow (event parsing, login, etc.) is managed as it is in the lambda.
 This initial flow is described in the "Basic code flow" section below.
