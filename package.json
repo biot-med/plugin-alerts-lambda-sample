@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "local": "",
-    "test": "node ./tests/test.js",
+    "test": "node --trace-warnings ./tests/test.js",
     "build": "",
     "clean": "",
     "zip": "node ./scripts/pack"
