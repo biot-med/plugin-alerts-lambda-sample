@@ -1,6 +1,6 @@
 import { BIOT_SHOULD_VALIDATE_JWT } from "./src/constants.js";
 
-import { getTraceId, configureLogger } from "./src/utils/index.js";
+import { getTraceId, configureLogger, checkEnvironmentVariables } from "./src/utils/index.js";
 
 import {
   authenticate,
@@ -20,10 +20,12 @@ let isFirstRun = true;
 
 export const handler = async (event) => {
   // The following two logs are just for debugging. You should remove them as soon as you can, the token should not be printed to logs.
-  console.info("1 At Lambda start, got event: ", event);
-  console.info("2 At Lambda start, got body: ", JSON.parse(event.body));
+  console.info("At Lambda start, got event: ", event);
+  console.info("At Lambda start, extracted body: ", JSON.parse(event.body));
 
   let traceId = "traceId-not-set";
+
+  checkEnvironmentVariables();
 
   try {
     // This extracts the data, metadata, token and traceId from the event
