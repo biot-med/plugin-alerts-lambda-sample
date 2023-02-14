@@ -1,6 +1,6 @@
 import { BIOT_SEVERITY_CRITICAL_THRESHOLD, BIOT_CLEAR_THRESHOLD, SEVERITY_CLEARED_VALUE, SEVERITY_CRITICAL_VALUE, STATE_ACTIVE_VALUE } from '../constants.js'
 
-export const getAlert = (measurement) => {
+export const generateDesiredAlert = (measurement) => {
 
     const isAboveCritical = measurement > BIOT_SEVERITY_CRITICAL_THRESHOLD;
     const isCleared = measurement < BIOT_CLEAR_THRESHOLD;
