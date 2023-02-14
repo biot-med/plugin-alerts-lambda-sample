@@ -1,10 +1,9 @@
-import { SEVERITY_CRITICAL_THRESHOLD, CLEAR_THRESHOLD, SEVERITY_CLEARED_VALUE, SEVERITY_CRITICAL_VALUE, STATE_ACTIVE_VALUE } from '../constants.js'
-//TODO: Ori: add check for in variable?
+import { BIOT_SEVERITY_CRITICAL_THRESHOLD, BIOT_CLEAR_THRESHOLD, SEVERITY_CLEARED_VALUE, SEVERITY_CRITICAL_VALUE, STATE_ACTIVE_VALUE } from '../constants.js'
 
 export const getAlert = (measurement) => {
 
-    const isAboveCritical = measurement > SEVERITY_CRITICAL_THRESHOLD;
-    const isCleared = measurement < CLEAR_THRESHOLD;
+    const isAboveCritical = measurement > BIOT_SEVERITY_CRITICAL_THRESHOLD;
+    const isCleared = measurement < BIOT_CLEAR_THRESHOLD;
     
     if(!isAboveCritical && !isCleared) return;
 
