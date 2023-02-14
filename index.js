@@ -1,4 +1,6 @@
-import { getTraceId, configureLogger } from "./src/index.js";
+import { BIOT_SHOULD_VALIDATE_JWT } from "./src/constants.js";
+
+import { getTraceId, configureLogger } from "./src/utils/index.js";
 
 import {
   authenticate,
@@ -8,7 +10,6 @@ import {
   createErrorResponse,
 } from "./src/notification/index.js";
 
-import { BIOT_SHOULD_VALIDATE_JWT } from "./src/index.js";
 
 // The same lambda instance might run multiple times on different re-invocations.
 // So this prevent certain actions on subsequent runs (like log overrides).
@@ -28,8 +29,8 @@ export const handler = async (event) => {
     // This extracts the data, metadata, token and traceId from the event
     // Note: Some of these properties might not be relevant for certain cases, you can remove them if they are not relevant
     //       For example, metadata does not exist in interceptors' events.
-    const { data, eventToken, eventTraceId, metadata } =
-      extractDataFromEvent(event);
+   
+    const { data, eventToken, eventTraceId, metadata } = extractDataFromEvent(event);
 
     // We extract the traceId from the event
     // As a fallback, if the traceId is not included, we get a new traceId from a open BioT AIP service
