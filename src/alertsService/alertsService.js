@@ -14,18 +14,13 @@ export const generateDesiredAlert = (measurementsData) => {
     return  {
         ...(isCleared ? {_state: SEVERITY_CLEARED_VALUE} : {}),
         ...(isAboveCritical ? {_severity: SEVERITY_CRITICAL_VALUE, _state: STATE_ACTIVE_VALUE} : {}),
-        // TODO: Should _templateId be added here or in saveAlert or inside createPatientAlert ?
-        _templateId: BIOT_ALERT_TEMPLATE_ID
+
     }
 }
 
-const isSameAlert = (requiredAlert, existingAlert) => {
-  return requiredAlert._state === existingAlert._state && requiredAlert._severity === existingAlert._severity
+const isSameAlert = (desiredAlert, existingAlert) => {
+  return desiredAlert._state === existingAlert._state && desiredAlert._severity === existingAlert._severity
 }
-/* 
-const sameAlertExists = (requiredAlert, existingAlerts) => {
-  existingAlerts.find(existingAlert => isSameAlert(requiredAlert))
-} */
 
 const generateGetAlertSearchRequestParams = (patientId) => ({
         filter: {
@@ -41,20 +36,24 @@ const generateGetAlertSearchRequestParams = (patientId) => ({
         }
 })
 
-export const saveAlert = async (requiredAlert, patientId, token, traceId) => { 
+export const saveAlert = async (desiredAlert, patientId, token, traceId) => { 
     
+  console.info("Lambda generated desiredAlert: ", desiredAlert)
+
   const searchRequestParams = generateGetAlertSearchRequestParams(patientId);
   const existingAlerts = await getPatientAlertResponse(token, traceId, searchRequestParams);
-
-  const existingAlert = existingAlerts[0];
-  const requestBody = { ...requiredAlert };
   
-  if( existingAlerts && existingAlerts.length && !isSameAlert(requiredAlert, existingAlert)) {
-      console.log("existingAlerts && existingAlerts.length && !isSameAlert(requiredAlert, existingAlert) ", existingAlerts && existingAlerts.length && !isSameAlert(requiredAlert, existingAlert));
-        updatePatientAlert(token, traceId, patientId, requestBody, existingAlert)
-  } else if (!existingAlerts || !existingAlerts.length) {
-      console.log("NO existingAlerts ", existingAlerts);
-      const responseAlert = await createPatientAlert(token, traceId, patientId, requestBody); //TODO: change templateId - should be template name when there is BE support for it
+  const existingAlert = existingAlerts?.[0];
+  
+  console.info("Lambda found existing alert response: ", existingAlert)
+
+
+  if( existingAlert && !isSameAlert(desiredAlert, existingAlert)) {
+      const responseAlert = await updatePatientAlert(token, traceId, patientId, existingAlert._id, desiredAlert)
+      console.info("Lambda updated alert response: ", responseAlert)
+    } else if (!existingAlert || !existingAlerts.length) {
+      const responseAlert = await createPatientAlert(token, traceId, patientId, { ...desiredAlert, _templateId: BIOT_ALERT_TEMPLATE_ID }); //TODO: change templateId - should be template name when there is BE support for it
+      console.info("Lambda created new alert response: ", responseAlert)
   }
   return;
 }
