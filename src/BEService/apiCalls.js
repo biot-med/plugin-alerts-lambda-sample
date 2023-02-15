@@ -42,11 +42,11 @@ import { API_CALL_ERROR, BIOT_BASE_URL, TRACE_ID_KEY } from "../constants.js";
 export const getPatientAlertResponse = /* process.env.NODE_ENV === "test" ? mockPatientAlertResponseFunction() :  */getPatientAlertResponseFunction();
 
 
-export const createPatientAlert = () => async (newToken, traceId, patientId, body) => { 
+export const createPatientAlert = async (newToken, traceId, patientId, requestBody) => { 
   const BioTApiCallUrl = `${BIOT_BASE_URL}/organization/v1/users/patients/${patientId}/alerts`;
-  
+  console.log("in createPatientAlert")
   try {
-    const response = await axios.post(BioTApiCallUrl, body, {
+    const response = await axios.post(BioTApiCallUrl, requestBody, {
       headers: { authorization: `Bearer ${newToken}`, [TRACE_ID_KEY]: traceId },
     });
 
@@ -54,6 +54,27 @@ export const createPatientAlert = () => async (newToken, traceId, patientId, bod
 
     const { data } = response?.data || {};
 
+    return data;
+  } catch (error) {
+    throw new Error(API_CALL_ERROR, { cause: error });
+  }
+};
+
+export const updatePatientAlert = async (newToken, traceId, patientId, requestBody, existingAlert) => { 
+  const BioTApiCallUrl = `${BIOT_BASE_URL}/organization/v1/users/patients/${patientId}/alerts/${existingAlert.id}`;
+  console.log("in updatePatientAlert")
+  console.log("in existingAlert", existingAlert)
+  try {
+    const response = await axios.post(BioTApiCallUrl, requestBody, {
+      headers: { authorization: `Bearer ${newToken}`, [TRACE_ID_KEY]: traceId },
+    });
+
+    console.log("ORI  ~ file: apiCalls.js:54 ~ updatePatientAlert ~ response", response)
+
+    const { data } = response?.data || {};
+    
+    console.log("ORI  ~ file: apiCalls.js:75 ~ updatePatientAlert ~ data", data)
+    
     return data;
   } catch (error) {
     throw new Error(API_CALL_ERROR, { cause: error });
