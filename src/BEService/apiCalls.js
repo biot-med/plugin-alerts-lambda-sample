@@ -14,13 +14,10 @@ import { API_CALL_ERROR, BIOT_BASE_URL, TRACE_ID_KEY } from "../constants.js";
       headers: { authorization: `Bearer ${newToken}`, [TRACE_ID_KEY]: traceId },
     });
 
-    console.log("response ", response)
-    console.log("response.data?.data ", JSON.stringify(response.data?.data))
     const { data } = response?.data || {};
 
     return data;
   } catch (error) {
-    console.error(error)
     throw new Error(API_CALL_ERROR, { cause: error });
   }
 };
@@ -44,3 +41,23 @@ const mockPatientAlertResponseFunction = () =>  async (newToken, traceId, body) 
 };
 
 export const getPatientAlertResponse = process.env.NODE_ENV === "test" ? mockPatientAlertResponseFunction() : getPatientAlertResponseFunction();
+
+
+export const createPatientAlert = () => async (newToken, traceId, patientId, body) => { 
+  const BioTApiCallUrl = `${BIOT_BASE_URL}/organization/v1/users/patients/${patientId}/alerts`;
+  
+  try {
+    // This get request asks for patient alert from organization API
+    const response = await axios.post(BioTApiCallUrl, body, {
+      headers: { authorization: `Bearer ${newToken}`, [TRACE_ID_KEY]: traceId },
+    });
+
+    console.log("ORI  ~ file: apiCalls.js:54 ~ createNewPatientAlert ~ response", response)
+
+    const { data } = response?.data || {};
+
+    return data;
+  } catch (error) {
+    throw new Error(API_CALL_ERROR, { cause: error });
+  }
+};

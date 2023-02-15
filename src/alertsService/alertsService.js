@@ -1,5 +1,5 @@
 import { BIOT_SEVERITY_CRITICAL_THRESHOLD, BIOT_CLEAR_THRESHOLD, SEVERITY_CLEARED_VALUE, SEVERITY_CRITICAL_VALUE, STATE_ACTIVE_VALUE } from '../constants.js'
-import { getPatientAlertResponse } from '../BEService/apiCalls.js';
+import { getPatientAlertResponse, createPatientAlert } from '../BEService/apiCalls.js';
 
 
 export const getRequiredAlert = (measurement) => {
@@ -15,7 +15,7 @@ export const getRequiredAlert = (measurement) => {
     }
 }
 
-const createGetAlertSearchRequestParams = (patientId, templateId) => ({
+const generateGetAlertSearchRequestParams = (patientId, templateId) => ({
         filter: {
           ["_patient.id"]: {
             in: [patientId]
@@ -29,8 +29,17 @@ const createGetAlertSearchRequestParams = (patientId, templateId) => ({
         }
 })
 
+export const saveAlert = async (requiredAlert, patientId, templateId, token, traceId) => { //TODO: change templateId - should be template name when there is BE support for it
+    const searchRequestParams = generateGetAlertSearchRequestParams(patientId, templateId);
+    const existingAlerts = await getPatientAlertResponse(token, traceId, searchRequestParams);
+    if( existingAlerts && existingAlerts.length ) {
+        console.log("Got existingAlerts ", existingAlerts);
+        //UPDATE
+        
+    } else {
+        console.log("NO existingAlerts ", existingAlerts);
+        // TODO: Should _templateId be added here or in getRequiredAlert or inside createPatientAlert
+        const responseAlert = await createPatientAlert(token, traceId, patientId, { _templateId: templateId, ...requiredAlert }); 
+    }
 
-export const setAlert = async (requiredAlert, patientId, templateId, token, traceId) => { //TODO: change templateId - should be template name when there is BE support for it
-    const searchRequestParams = createGetAlertSearchRequestParams(patientId, templateId);
-    const existingAlert = await getPatientAlertResponse(token, traceId, searchRequestParams);
 }
