@@ -17,6 +17,8 @@ export const validateEnvironmentVariables = () => {
 
     const missingVars = Object.entries(requiredEnvironmentVariables).flatMap(([envVarName, envVarValue]) => exists(envVarValue) ? [] : String(envVarName));
     
-    if(missingVars?.length) console.error(`Missing environment variables : ${missingVars.join(", ")}`)
+    if(missingVars?.length) {
+        console.error(`Missing environment variables : ${missingVars.join(", ")}`)
+    }
     
 }
