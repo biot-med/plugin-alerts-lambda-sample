@@ -1,8 +1,8 @@
 {
   "name": "plugin-lambda-seed-public",
   "type": "module",
-  "version": "1.1.4",
-  "description": "Node.js AWS lambda seed for biot",
+  "version": "1.1.1",
+  "description": "Node.js AWS alert lambda sample for biot",
   "main": "index.js",
   "scripts": {
     "local": "",
