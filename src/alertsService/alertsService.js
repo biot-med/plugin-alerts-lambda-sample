@@ -13,8 +13,7 @@ export const generateDesiredAlert = (measurementsData) => {
 
     return  {
         ...(isCleared ? {_state: SEVERITY_CLEARED_VALUE} : {}),
-        ...(isAboveCritical ? {_severity: SEVERITY_CRITICAL_VALUE, _state: STATE_ACTIVE_VALUE} : {}),
-
+        ...(isAboveCritical ? {_severity: SEVERITY_CRITICAL_VALUE, _state: STATE_ACTIVE_VALUE} : {})
     }
 }
 

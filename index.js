@@ -42,7 +42,7 @@ export const handler = async (event) => {
     // This makes sure these commands are only run in the first invocation
     if (isFirstRun) {
       // Here we are creating new logs format that follows the structure required for dataDog logs (including a traceId)
-      // await configureLogger(traceId);
+      await configureLogger(traceId);
       isFirstRun = false;
     }
 
@@ -52,7 +52,7 @@ export const handler = async (event) => {
 
     // Here we are requesting a token for the lambda
     // It is done using a service users BIOT_SERVICE_USER_ID and BIOT_SERVICE_USER_SECRET_KEY that should be set to an environment variable
-    const token = /* process.env.NODE_ENV !== 'test' ??  */await login(traceId);
+    const token = await login(traceId);
 
     // Some of the properties sent to perform might not be relevant, depending on the type of lambda or lambda hook used to invoke it
     const response = await perform(
