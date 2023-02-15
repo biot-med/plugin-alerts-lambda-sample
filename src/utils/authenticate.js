@@ -7,6 +7,7 @@ import {
   BIOT_BASE_URL,
   BIOT_SERVICE_USER_ID,
   BIOT_SERVICE_USER_SECRET_KEY,
+  TRACE_ID_KEY,
 } from "../constants.js";
 
 export const authenticate = async (token, traceId) => {
@@ -43,7 +44,7 @@ export const login = async (traceId) => {
     },
     {
       headers: {
-        "x-b3-traceid": traceId,
+        [TRACE_ID_KEY]: traceId,
       },
     }
   );

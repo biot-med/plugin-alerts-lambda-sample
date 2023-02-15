@@ -1,8 +1,15 @@
-import { getTraceId, configureLogger, checkRequestType } from "./src/index.js";
+import { BIOT_SHOULD_VALIDATE_JWT } from "./src/constants.js";
 
-import { BIOT_SHOULD_VALIDATE_JWT } from "./src/index.js";
+import { getTraceId, configureLogger, validateEnvironmentVariables } from "./src/utils/index.js";
 
-import functionsMapper from "./src/index.js";
+import {
+  authenticate,
+  login,
+  extractDataFromEvent,
+  perform,
+  createErrorResponse,
+} from "./src/notification/index.js";
+
 
 // The same lambda instance might run multiple times on different re-invocations.
 // So this prevent certain actions on subsequent runs (like log overrides).
@@ -14,30 +21,18 @@ let isFirstRun = true;
 export const handler = async (event) => {
   // The following two logs are just for debugging. You should remove them as soon as you can, the token should not be printed to logs.
   console.info("At Lambda start, got event: ", event);
-  console.info("At Lambda start, got body: ", JSON.parse(event.body));
+  console.info("At Lambda start, extracted body: ", JSON.parse(event.body));
 
   let traceId = "traceId-not-set";
 
-  // This mapper makes it possible to use all types of the lambdas hooks (notification, interceptors or any other non-specific hooks)
-  // This requestType can be replaced with spreading the specific functionsMapper for your type of hook, or a direct import of the types functions
-  // Then you can remove checkRequestType and the mapper
-  // Example: For interceptorPre, you can remove this and at the top of this file add:
-  //          import { authenticate, login, extractDataFromEvent, perform, createErrorResponse } from "./src/interceptorPre/index.js"
-  let requestType = checkRequestType(event);
-  const {
-    authenticate,
-    login,
-    extractDataFromEvent,
-    perform,
-    createErrorResponse,
-  } = functionsMapper[requestType];
+  validateEnvironmentVariables();
 
   try {
     // This extracts the data, metadata, token and traceId from the event
     // Note: Some of these properties might not be relevant for certain cases, you can remove them if they are not relevant
     //       For example, metadata does not exist in interceptors' events.
-    const { data, eventToken, eventTraceId, metadata } =
-      extractDataFromEvent(event);
+   
+    const { data, eventToken, eventTraceId, metadata } = extractDataFromEvent(event);
 
     // We extract the traceId from the event
     // As a fallback, if the traceId is not included, we get a new traceId from a open BioT AIP service
