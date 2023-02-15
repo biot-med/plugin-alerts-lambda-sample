@@ -1,6 +1,6 @@
 import { BIOT_SHOULD_VALIDATE_JWT } from "./src/constants.js";
 
-import { getTraceId, configureLogger, checkEnvironmentVariables } from "./src/utils/index.js";
+import { getTraceId, configureLogger, validateEnvironmentVariables } from "./src/utils/index.js";
 
 import {
   authenticate,
@@ -25,7 +25,7 @@ export const handler = async (event) => {
 
   let traceId = "traceId-not-set";
 
-  checkEnvironmentVariables();
+  validateEnvironmentVariables();
 
   try {
     // This extracts the data, metadata, token and traceId from the event
