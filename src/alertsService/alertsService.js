@@ -15,23 +15,22 @@ export const getRequiredAlert = (measurement) => {
     }
 }
 
-const createGetAlertBody = (patientId, templateId) => ({
-        "filter": {
-          "_patient.id": {
-            "in": [patientId]
+const createGetAlertSearchRequestParams = (patientId, templateId) => ({
+        filter: {
+          ["_patient.id"]: {
+            in: [patientId]
           },
-          "_templateId": {
-            "in": [templateId]
+          _templateId: {
+            in: [templateId]
           },
-          "_state": {
-            "not": SEVERITY_CLEARED_VALUE
+          _state: {
+            not: SEVERITY_CLEARED_VALUE
           }
         }
 })
 
 
 export const setAlert = async (requiredAlert, patientId, templateId, token, traceId) => { //TODO: change templateId - should be template name when there is BE support for it
-    
-    const body = createGetAlertBody(patientId, templateId);
-    const existingAlert = await getPatientAlertResponse(token, traceId, body);
+    const searchRequestParams = createGetAlertSearchRequestParams(patientId, templateId);
+    const existingAlert = await getPatientAlertResponse(token, traceId, searchRequestParams);
 }
