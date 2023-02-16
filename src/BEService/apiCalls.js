@@ -13,7 +13,7 @@ import { API_CALL_ERROR, BIOT_BASE_URL, TRACE_ID_KEY } from "../constants.js";
     const { data } = response?.data || {};
     return data;
   } catch (error) {
-    throw new Error(JSON.stringify(error?.response?.data) || error, error?.response?.data && { cause: error })
+    throw new Error(JSON.stringify(error?.response?.data) || error, !error?.response?.data && { cause: error })
   }
 };
 
@@ -26,7 +26,7 @@ export const createPatientAlert = async (newToken, traceId, patientId, desiredAl
     const { data } = response?.data || {};
     return data;
   } catch (error) {
-    throw new Error(JSON.stringify(error?.response?.data) || error, error?.response?.data && { cause: error })
+    throw new Error(JSON.stringify(error?.response?.data) || error, !error?.response?.data && { cause: error })
   }
 };
 
@@ -39,6 +39,6 @@ export const updatePatientAlert = async (newToken, traceId, patientId, existingA
     const { data } = response || {};
     return data;
   } catch (error) {
-    throw new Error(JSON.stringify(error?.response?.data) || error, error?.response?.data && { cause: error })
+    throw new Error(JSON.stringify(error?.response?.data) || error, !error?.response?.data && { cause: error })
   }
 };

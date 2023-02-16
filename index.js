@@ -30,7 +30,6 @@ export const handler = async (event) => {
   try {
     // This extracts the data, metadata, token and traceId from the event
     // Note: Some of these properties might not be relevant for certain cases, you can remove them if they are not relevant
-    //       For example, metadata does not exist in interceptors' events.
    
     const { data, eventToken, eventTraceId, metadata } = extractDataFromEvent(event);
 
