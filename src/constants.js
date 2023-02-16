@@ -1,10 +1,10 @@
 const constants = {
-  API_CALL_ERROR: "CALL_TO_API_FAILED",
-  JWT_ERROR: "JWT_ERROR",
-  NO_EVENT_ERROR: "NO_EVENT",
-  NO_METADATA_ERROR: "NO_METADATA",
-  NO_DATA_ERROR: "NO_DATA",
-  TRACE_ID_KEY: "trace-id",
+  API_CALL_ERROR: "Call to api failed",
+  JWT_ERROR: "jwt error",
+  NO_EVENT_ERROR: "No event received",
+  NO_METADATA_ERROR: "No metadata",
+  NO_DATA_ERROR: "No data",
+  TRACE_ID_KEY: "x-b3-traceid",
   STATE_ACTIVE_VALUE: "ACTIVE", 
   SEVERITY_CRITICAL_VALUE: "CRITICAL",
   SEVERITY_CLEARED_VALUE: "CLEARED"

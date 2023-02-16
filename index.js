@@ -7,7 +7,7 @@ import {
   login,
   extractDataFromEvent,
   perform,
-  createErrorResponse,
+  createError,
 } from "./src/notification/index.js";
 
 
@@ -30,7 +30,6 @@ export const handler = async (event) => {
   try {
     // This extracts the data, metadata, token and traceId from the event
     // Note: Some of these properties might not be relevant for certain cases, you can remove them if they are not relevant
-    //       For example, metadata does not exist in interceptors' events.
    
     const { data, eventToken, eventTraceId, metadata } = extractDataFromEvent(event);
 
@@ -55,17 +54,15 @@ export const handler = async (event) => {
     const token = await login(traceId);
 
     // Some of the properties sent to perform might not be relevant, depending on the type of lambda or lambda hook used to invoke it
-    const response = await perform(
+    await perform(
       data,
       token || null,
       traceId,
       metadata || null
     );
 
-    return response;
+    return;
   } catch (error) {
-    // This should return the proper error responses by the type of error that occurred
-    // See the createErrorResponse function for your specific lambda usage
-    return createErrorResponse(error, traceId);
+    createError(error);
   }
 };

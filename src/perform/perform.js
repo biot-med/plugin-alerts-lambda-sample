@@ -1,16 +1,24 @@
+import { generateDesiredAlert, saveAlert } from '../alertsService/alertsService.js';
 import { extractEntityMeasurements, extractEntityParentPatientId } from '../utils/extractEntityData.js';
-import { generateDesiredAlert } from '../alertsService/alertsService.js';
 
 export const perform = async (data, token, traceId) => {
-  console.log("--------------    In perform    ---------------");
-
-  // TODO: ORI: ADD EXPLANATION HERE !
+  console.info("--------------    In perform    ---------------");
 
   const measurementsData = extractEntityMeasurements(data);
+
+  console.info("Lambda found measurements ", measurementsData)
+  
   const patientId = extractEntityParentPatientId(data);
+  
+  console.info("Lambda found patient id ", patientId);
 
-  const desiredAlert = generateDesiredAlert(measurementsData)
+  const desiredAlert = generateDesiredAlert(measurementsData);
 
   
-  
+  if(!!desiredAlert) {
+    console.info("Lambda generated desiredAlert: ", desiredAlert)
+    await saveAlert(desiredAlert, patientId, token, traceId) 
+  }
+
+  return;  
 };
