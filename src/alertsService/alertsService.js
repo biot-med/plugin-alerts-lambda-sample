@@ -39,8 +39,9 @@ export const saveAlert = async (desiredAlert, patientId, token, traceId) => {
 
   // This creates the request params with the filter for the existing patient alerts
   const searchRequestParams = generateGetAlertSearchRequestParams(patientId);
-  const existingAlerts = await getPatientAlertResponse(token, traceId, searchRequestParams);
-  
+  const existingAlertsResponse = await getPatientAlertResponse(token, traceId, searchRequestParams);
+  const existingAlerts = existingAlertsResponse?.data;
+
   // There can only be one alert that is not "CLEARED", therefore we access the array at index 0
   const existingAlert = existingAlerts?.[0];
   
@@ -48,11 +49,11 @@ export const saveAlert = async (desiredAlert, patientId, token, traceId) => {
 
 
   if( existingAlert && shouldUpdateAlert(desiredAlert, existingAlert)) {
-      const responseAlert = await updatePatientAlert(token, traceId, patientId, existingAlert._id, desiredAlert)
-      console.info("Lambda updated alert response: ", responseAlert)
+      const updatedAlert = await updatePatientAlert(token, traceId, patientId, existingAlert._id, desiredAlert)
+      console.info("Lambda updated alert: ", updatedAlert)
     } else if (!existingAlert) {
-      const responseAlert = await createPatientAlert(token, traceId, patientId, { ...desiredAlert, _templateId: BIOT_ALERT_TEMPLATE_ID }); //TODO: change templateId - should be template name when there is BE support for it
-      console.info("Lambda created new alert response: ", responseAlert)
+      const createdAlert = await createPatientAlert(token, traceId, patientId, { ...desiredAlert, _templateId: BIOT_ALERT_TEMPLATE_ID }); //TODO: change templateId - should be template name when there is BE support for it
+      console.info("Lambda created new alert: ", createdAlert)
   }
   return;
 }
