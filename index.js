@@ -47,7 +47,7 @@ export const handler = async (event) => {
 
     // This is the authentication process for the lambda itself
     // Note: environment variable BIOT_SHOULD_VALIDATE_JWT should be false if the lambda does not receive a token, otherwise authentication will fail the lambda
-    if (BIOT_SHOULD_VALIDATE_JWT === true) await authenticate(eventToken, traceId);
+    if (BIOT_SHOULD_VALIDATE_JWT === "true") await authenticate(eventToken, traceId);
 
     // Here we are requesting a token for the lambda
     // It is done using a service users BIOT_SERVICE_USER_ID and BIOT_SERVICE_USER_SECRET_KEY that should be set to an environment variable

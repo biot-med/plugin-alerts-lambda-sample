@@ -11,13 +11,11 @@ export const generateDesiredAlert = (measurementsData) => {
     const isAboveCritical = measurement > BIOT_SEVERITY_CRITICAL_THRESHOLD;
     const isCleared = measurement < BIOT_CLEAR_THRESHOLD;
     
-    if( isCleared ) {
-      return  { _state: SEVERITY_CLEARED_VALUE }
-    }
+    if( isCleared ) { return { _state: SEVERITY_CLEARED_VALUE } };
 
-    if( isAboveCritical ) {
-      return { _severity: SEVERITY_CRITICAL_VALUE, _state: STATE_ACTIVE_VALUE }
-    }
+    if( isAboveCritical ) { return { _severity: SEVERITY_CRITICAL_VALUE, _state: STATE_ACTIVE_VALUE } };
+
+    return;
 }
 
 // Checks if we should update the existing alert
