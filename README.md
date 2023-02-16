@@ -28,9 +28,7 @@ The lambda uses notification services (receives hooktype `NOTIFICATION` in the e
 
 - `perform` - The `perform` functions manages the required alerts. It checks the measurements received from the event, if changes are relevant it checks for existing alerts and updates or add a new alert accordingly.
 
-- `createErrorResponse` - This is a mapper for errors to be returned from the lambda.
-  - In case of interceptors, the data structure is important (follow the data structure supplied for the interceptors in their `createErrorResponse` function.
-  - If you add a new error code, add the error's code name to the constants, add the error response in `createErrorResponse`, and use `throw new error(ERROR_CODE_NAME)` where the error occur in your code.
+- `createError` - This is a mapper for errors to be logged
 
 ## Environment variables
 
