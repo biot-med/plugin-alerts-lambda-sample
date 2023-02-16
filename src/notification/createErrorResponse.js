@@ -86,7 +86,7 @@ const errors = {
 };
 
 export const createErrorResponse = (error, traceId) => {
-  console.error("Got error: ", error);
+  console.error("Got error: ", error, "error.cause : ", error?.cause?.message);
   return (
     (error && errors[error?.message]?.(error, traceId)) ||
     errors.internalServerError(error, traceId)

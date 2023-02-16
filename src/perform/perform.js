@@ -16,6 +16,7 @@ export const perform = async (data, token, traceId) => {
 
   
   if(!!desiredAlert) {
+    console.info("Lambda generated desiredAlert: ", desiredAlert)
     await saveAlert(desiredAlert, patientId, token, traceId) 
   }
 
