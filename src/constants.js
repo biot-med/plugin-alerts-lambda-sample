@@ -80,7 +80,7 @@ const {
 // This prepares the BIOT_PUBLIC_KEY to be used with jsonwebtoken's parse (in authenticate function)
 const BIOT_PUBLIC_KEY = [
   "-----BEGIN PUBLIC KEY-----",
-  constants.BIOT_PUBLIC_KEY,
+  environmentConstants.BIOT_PUBLIC_KEY,
   "-----END PUBLIC KEY-----",
 ].join("\n");
 

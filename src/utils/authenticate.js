@@ -26,6 +26,7 @@ export const authenticate = async (token, traceId) => {
       }
     }
   } catch (error) {
+    console.error("error cause", error);
     throw new Error(JWT_ERROR, { cause: error });
   }
 };
