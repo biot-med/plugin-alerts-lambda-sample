@@ -1,3 +1,10 @@
+# Version 1.1.3
+
+**Released by**: Ori Roll **Release Date** 21 FEB 23
+
+## Changes
+
+- Bug fixes
 # Version 1.1.2
 
 **Released by**: Ori Roll **Release Date** 15 FEB 23
