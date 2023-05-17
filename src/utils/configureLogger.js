@@ -1,4 +1,5 @@
 import { BIOT_APP_NAME } from "../constants.js";
+import { parseTraceparentString } from "../utils/index.js";
 
 let logOptions = [
   { function: "debug", level: "DEBUG", level_value: 10000 },
@@ -51,11 +52,11 @@ const createConsoleOverride = (
 
 /** This function overrides the console functions and formats to an object containing traceId and other required information*/
 
-export const configureLogger = (traceId) => {
+export const configureLogger = (traceparent) => {
   logOptions.forEach((consoleItem) => {
     console[consoleItem.function] = createConsoleOverride(
       console[consoleItem.function],
-      traceId,
+      parseTraceparentString(traceparent),
       consoleItem.level,
       consoleItem.level_value
     );

@@ -1,3 +1,11 @@
+# Version 1.1.4
+
+**Released by**: Ben Rachmian **Release Date** 17 MAY 23
+
+## Changes
+
+- Fixed the code to work with traceparent instead of traceId
+
 # Version 1.1.3
 
 **Released by**: Ori Roll **Release Date** 21 FEB 23
