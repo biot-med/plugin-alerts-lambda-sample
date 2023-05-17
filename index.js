@@ -7,7 +7,7 @@ import {
   login,
   extractDataFromEvent,
   perform,
-  createError,
+  createErrorResponse
 } from "./src/notification/index.js";
 
 
@@ -35,13 +35,13 @@ export const handler = async (event) => {
 
     // We extract the traceparent from the event
     // As a fallback, if the traceparent is not included, we create a new traceparent 
-    traceparent = eventTraceparent ?? (await createTraceparent());
+    traceparent = eventTraceparent ??  createTraceparent();
 
     // The lambda might be reinvoked several times for several consecutive requests
     // This makes sure these commands are only run in the first invocation
     if (isFirstRun) {
       // Here we are creating new logs format that follows the structure required for dataDog logs (including a traceId)
-      await configureLogger(traceparent);
+      configureLogger(traceparent);
       isFirstRun = false;
     }
 
@@ -54,15 +54,17 @@ export const handler = async (event) => {
     const token = await login(traceparent);
 
     // Some of the properties sent to perform might not be relevant, depending on the type of lambda or lambda hook used to invoke it
-    await perform(
+    const response = await perform(
       data,
       token || null,
       traceparent,
       metadata || null
     );
 
-    return;
+    return response;
   } catch (error) {
-    createError(error);
+    // This should return the proper error responses by the type of error that occurred
+    // See the createErrorResponse function for your specific lambda usage
+    return createErrorResponse(error, traceparent);
   }
 };

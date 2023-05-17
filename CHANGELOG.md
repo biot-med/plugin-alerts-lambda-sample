@@ -1,8 +1,10 @@
-# Version 1.1.4
+# Version 1.2.0
 
 **Released by**: Ben Rachmian **Release Date** 17 MAY 23
 
 ## Changes
+
+- Updated code due to the changes in the lambda seed
 
 - Fixed the code to work with traceparent instead of traceId
 

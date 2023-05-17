@@ -26,7 +26,6 @@ export const authenticate = async (token) => {
       }
     }
   } catch (error) {
-    console.error("error cause", error);
     throw new Error(JWT_ERROR, { cause: error });
   }
 };

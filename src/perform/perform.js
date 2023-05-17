@@ -1,5 +1,6 @@
 import { generateDesiredAlert, saveAlert } from '../alertsService/alertsService.js';
 import { extractEntityMeasurements, extractEntityParentPatientId } from '../utils/extractEntityData.js';
+import { genericSuccessResponse } from "../utils/index.js";
 
 export const perform = async (data, token, traceparent) => {
   console.info("--------------    In perform    ---------------");
@@ -20,5 +21,5 @@ export const perform = async (data, token, traceparent) => {
     await saveAlert(desiredAlert, patientId, token, traceparent) 
   }
 
-  return;  
+  return genericSuccessResponse(traceparent);  
 };
