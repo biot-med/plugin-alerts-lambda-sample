@@ -3,7 +3,6 @@ import JWT from "jsonwebtoken";
 import {
   BIOT_PUBLIC_KEY,
   JWT_ERROR,
-  BIOT_JWT_PERMISSION,
   BIOT_BASE_URL,
   BIOT_SERVICE_USER_ID,
   BIOT_SERVICE_USER_SECRET_KEY,
@@ -12,19 +11,13 @@ import {
 
 export const authenticate = async (token) => {
   try {
-    // This validates the token sent by the notification service
-    const jwtData = await JWT.verify(token, BIOT_PUBLIC_KEY, {
-      algorithms: ["RS512"],
-    });
-    // This checks the token's permission
-
-    if (BIOT_JWT_PERMISSION) {
-      if (!jwtData.scopes?.includes(BIOT_JWT_PERMISSION)) {
-        throw new Error(
-          `JWT does not have the required permissions. Missing: ${BIOT_JWT_PERMISSION}`
-        );
-      }
-    }
+        /** 
+     * This validates the token sent by the notification service and checks the required permission
+     * 
+     * This implementation checks JWT_PERMISSION from constants.js.
+     * You can define it in your plugin's environment variables, see constants.js
+     * */
+      checkJWT(token, JWT_PERMISSION);
   } catch (error) {
     throw new Error(JWT_ERROR, { cause: error });
   }
@@ -51,3 +44,20 @@ export const login = async (traceparent) => {
 
   return response.data.accessToken;
 };
+
+export const checkJWT = async (token, requiredPermission) => {
+  // This validates the token sent by the notification service
+  const jwtData = await JWT.verify(token, BIOT_PUBLIC_KEY, {
+    algorithms: ["RS512"],
+  });
+  
+  if (!requiredPermission) return;
+  // TODO: If you need to, update this function to add other permissions to be checked in the JWT
+      
+  // Checks the required permission in the token
+  if (!jwtData.scopes?.includes(requiredPermission)) {
+    throw new Error(
+      `JWT does not have the required permissions. Missing: ${requiredPermission}`
+    );
+  }
+}
