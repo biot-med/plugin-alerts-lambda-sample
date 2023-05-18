@@ -82,7 +82,7 @@ import {
         [TRACEPARENT_KEY]: traceparent,
       },
       body: createErrorResponseBody(
-        "internalServerError",
+        "INTERNAL_SERVER_ERROR",
         "Internal server error",
         traceId
       ),
