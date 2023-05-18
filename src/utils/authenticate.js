@@ -2,36 +2,14 @@ import axios from "axios";
 import JWT from "jsonwebtoken";
 import {
   BIOT_PUBLIC_KEY,
-  JWT_ERROR,
-  BIOT_JWT_PERMISSION,
   BIOT_BASE_URL,
   BIOT_SERVICE_USER_ID,
   BIOT_SERVICE_USER_SECRET_KEY,
-  TRACE_ID_KEY,
+  TRACEPARENT_KEY,
 } from "../constants.js";
 
-export const authenticate = async (token, traceId) => {
-  try {
-    // This validates the token sent by the notification service
-    const jwtData = await JWT.verify(token, BIOT_PUBLIC_KEY, {
-      algorithms: ["RS512"],
-    });
-    // This checks the token's permission
 
-    if (BIOT_JWT_PERMISSION) {
-      if (!jwtData.scopes?.includes(BIOT_JWT_PERMISSION)) {
-        throw new Error(
-          `JWT does not have the required permissions. Missing: ${BIOT_JWT_PERMISSION}`
-        );
-      }
-    }
-  } catch (error) {
-    console.error("error cause", error);
-    throw new Error(JWT_ERROR, { cause: error });
-  }
-};
-
-export const login = async (traceId) => {
+export const login = async (traceparent) => {
   if (!BIOT_BASE_URL) throw new Error("No BIOT_BASE_URL");
   if (!BIOT_SERVICE_USER_ID) throw new Error("No BIOT_SERVICE_USER_ID");
   if (!BIOT_SERVICE_USER_SECRET_KEY) throw new Error("No BIOT_SERVICE_USER_SECRET_KEY");
@@ -45,10 +23,29 @@ export const login = async (traceId) => {
     },
     {
       headers: {
-        [TRACE_ID_KEY]: traceId,
+        [TRACEPARENT_KEY]: traceparent,
       },
     }
   );
 
   return response.data.accessToken;
 };
+
+export const checkJWT = async (token, requiredPermission) => {
+  // This validates the token sent by the notification service
+  const jwtData = await JWT.verify(token, BIOT_PUBLIC_KEY, {
+    algorithms: ["RS512"],
+  });
+  
+  if (!requiredPermission) return;
+  // TODO: If you need to, update this function to add other permissions to be checked in the JWT
+      
+  // Checks the required permission in the token
+  if (!jwtData.scopes?.includes(requiredPermission)) {
+    throw new Error(
+      `JWT does not have the required permissions. Missing: ${requiredPermission}`
+    );
+  }
+
+  return;
+}
