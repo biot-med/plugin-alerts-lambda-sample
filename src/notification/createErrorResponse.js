@@ -8,6 +8,15 @@ import {
   } from "../constants.js";
   
   import { parseTraceparentString } from "../utils/index.js";
+
+  const createErrorResponseBody = (code, message, traceId, details = {}) => {
+    return JSON.stringify({
+      code,
+      message,
+      traceId,
+      details,
+    });
+  };
   
   const errors = {
     [API_CALL_ERROR]: (error, traceparent, traceId) => ({
@@ -15,75 +24,68 @@ import {
       headers: {
         [TRACEPARENT_KEY]: traceparent,
       },
-      body: JSON.stringify({
-        code: API_CALL_ERROR,
-        message: `Call to api failed${
-          error.cause?.message
-            ? `: "${JSON.stringify(error.cause?.message)}"`
-            : "."
-        }`,
-        traceId: traceId,
-        details: {},
-      }),
+      body: createErrorResponseBody(
+        API_CALL_ERROR,
+        `Call to API failed${error.cause?.message ? `: "${JSON.stringify(error.cause?.message)}"` : "."}`,
+        traceId,
+        {}
+      ),
     }),
     [JWT_ERROR]: (error, traceparent, traceId) => ({
       statusCode: 400,
       headers: {
         [TRACEPARENT_KEY]: traceparent,
       },
-      body: JSON.stringify({
-        code: JWT_ERROR,
-        message: `JWT error occurred${
-          error.cause?.message
-            ? `: "${JSON.stringify(error.cause?.message)}"`
-            : "."
-        }`,
-        traceId: traceId,
-        details: {},
-      }),
+      body: createErrorResponseBody(
+        JWT_ERROR,
+        `JWT error occurred${error.cause?.message ? `: "${JSON.stringify(error.cause?.message)}"` : "."}`,
+        traceId,
+        {}
+      ),
     }),
     [NO_EVENT_ERROR]: (error, traceparent, traceId) => ({
       statusCode: 400,
       headers: {
         [TRACEPARENT_KEY]: traceparent,
       },
-      body: JSON.stringify({
-        code: NO_EVENT_ERROR,
-        message: "no event sent",
-        traceId: traceId,
-      }),
+      body: createErrorResponseBody(
+        NO_EVENT_ERROR,
+        "No event sent",
+        traceId
+      ),
     }),
     [NO_METADATA_ERROR]: (error, traceparent, traceId) => ({
       statusCode: 400,
       headers: {
         [TRACEPARENT_KEY]: traceparent,
       },
-      body: JSON.stringify({
-        code: NO_METADATA_ERROR,
-        message: "no metadata sent in event",
-        traceId: traceId,
-      }),
+      body: createErrorResponseBody(
+        NO_METADATA_ERROR,
+        "No metadata sent in event",
+        traceId
+      ),
     }),
     [NO_DATA_ERROR]: (error, traceparent, traceId) => ({
       statusCode: 400,
       headers: {
         [TRACEPARENT_KEY]: traceparent,
       },
-      body: JSON.stringify({
-        code: NO_DATA_ERROR,
-        message: "no data sent in event",
-        traceId: traceId,
-      }),
+      body: createErrorResponseBody(
+        NO_DATA_ERROR,
+        "No data sent in event",
+        traceId
+      ),
     }),
     internalServerError: (error, traceparent, traceId) => ({
       statusCode: 500,
       headers: {
         [TRACEPARENT_KEY]: traceparent,
       },
-      body: JSON.stringify({
-        message: "internal server error",
-        traceId: traceId,
-      }),
+      body: createErrorResponseBody(
+        "internalServerError",
+        "Internal server error",
+        traceId
+      ),
     }),
   };
   
