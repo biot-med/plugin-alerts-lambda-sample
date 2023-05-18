@@ -2,26 +2,12 @@ import axios from "axios";
 import JWT from "jsonwebtoken";
 import {
   BIOT_PUBLIC_KEY,
-  JWT_ERROR,
   BIOT_BASE_URL,
   BIOT_SERVICE_USER_ID,
   BIOT_SERVICE_USER_SECRET_KEY,
   TRACEPARENT_KEY,
 } from "../constants.js";
 
-export const authenticate = async (token) => {
-  try {
-        /** 
-     * This validates the token sent by the notification service and checks the required permission
-     * 
-     * This implementation checks JWT_PERMISSION from constants.js.
-     * You can define it in your plugin's environment variables, see constants.js
-     * */
-      checkJWT(token, JWT_PERMISSION);
-  } catch (error) {
-    throw new Error(JWT_ERROR, { cause: error });
-  }
-};
 
 export const login = async (traceparent) => {
   if (!BIOT_BASE_URL) throw new Error("No BIOT_BASE_URL");
@@ -60,4 +46,6 @@ export const checkJWT = async (token, requiredPermission) => {
       `JWT does not have the required permissions. Missing: ${requiredPermission}`
     );
   }
+
+  return;
 }
